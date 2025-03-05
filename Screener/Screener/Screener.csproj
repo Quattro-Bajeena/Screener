@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\Screener.Client\Pages\Component.razor" Link="Component.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Screener.Client\Screener.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.2" />
