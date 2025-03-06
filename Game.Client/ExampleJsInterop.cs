@@ -1,6 +1,6 @@
 using Microsoft.JSInterop;
 
-namespace Game;
+namespace Game.Client;
 
 // This class provides an example of how JavaScript functionality can be wrapped
 // in a .NET class for easy consumption. The associated JavaScript module is
@@ -16,7 +16,7 @@ public class ExampleJsInterop : IAsyncDisposable
     public ExampleJsInterop(IJSRuntime jsRuntime)
     {
         moduleTask = new (() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./_content/Game/exampleJsInterop.js").AsTask());
+            "import", "./_content/Game.Client/exampleJsInterop.js").AsTask());
     }
 
     public async ValueTask<string> Prompt(string message)

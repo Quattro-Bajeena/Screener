@@ -1,0 +1,16 @@
+﻿@using global::Game.Models
+<h3>GameRoom</h3>
+
+@if (_game == null)
+{
+    <p>Game room</p>
+}
+else
+{
+    <Game />
+})
+
+
+@code {
+    GameState _game;
+}
