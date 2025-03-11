@@ -1,16 +1,59 @@
-﻿@using global::Game.Models
+﻿@using Core.Client.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using Screener.Data
+@using global::Game.Consts
+@using global::Game.Contracts.Requests
+@using global::Game.Contracts.Responses
+@using global::Game.Models
+
 <h3>GameRoom</h3>
 
-@if (_game == null)
+@if (_gameRoom == null)
 {
-    <p>Game room</p>
+    <div>Game loading...</div>
 }
 else
 {
-    <Game />
-})
+    <h3>Game room name: @_gameRoom.Name</h3>
+    <br />
+    <p>Players:</p>
+    @foreach (ApplicationUser user in _gameRoom?.Users)
+    {
+       
+        <p>
+            @if (user.UserName == _userName)
+            {
+                <div>YOU</div>
+            }
+            <div>@user.Id</div>
+            <div>@user.UserName</div>
+        </p>
+
+    }
+}
 
 
 @code {
-    GameState _game;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Inject]
+    private ApiClient ApiClient { get; set; }
+
+    private Models.GameRoom _gameRoom;
+    string _userName;
+
+
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        _userName = user.Identity.Name;
+        var userId = user.FindFirst(c => c.Type == "sub")?.Value;
+        GetRoomResponse response = await ApiClient.GetAsync<GetRoomRequest, GetRoomResponse>(GameRoutes.GetRoom, new GetRoomRequest { Id = Id });
+        _gameRoom = response.Room;
+    }
 }

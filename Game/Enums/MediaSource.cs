@@ -2,5 +2,6 @@
 
 public enum MediaSource
 {
-    Anime = 0,
+    None = 0,
+    Anime = 1,
 }

@@ -1,0 +1,46 @@
+﻿@using Core.Client.Services
+@using global::Game.Consts
+@using global::Game.Contracts.Requests
+@using global::Game.Contracts.Responses
+
+<h3>Lobby</h3>
+
+
+@foreach (Models.GameRoom room in _rooms)
+{
+    <div>
+        <h4>@room.Name</h4>
+        <p>@room.Users.Count()</p>
+        <button @onclick="() => JoinRoom(room.Id)">Join</button>
+    </div>
+}
+
+<hr />
+
+@if(_showHostRoomDialog)
+{
+    <GameSetup />
+}
+
+<hr />
+
+<button @onclick="() => _showHostRoomDialog=!_showHostRoomDialog">Host room</button>
+
+@code{
+    [Inject]
+    ApiClient Client { get; set; }
+
+    private List<Models.GameRoom> _rooms = new();
+    bool _showHostRoomDialog = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Client.GetAsync<GetRoomsRequest, GetRoomsResponse>(GameRoutes.GetRooms, new GetRoomsRequest());
+        _rooms = response.Rooms.ToList();
+    }
+
+    private void JoinRoom(Guid id)
+    {
+
+    }
+}

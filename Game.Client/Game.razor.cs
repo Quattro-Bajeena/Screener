@@ -24,7 +24,7 @@ public partial class Game : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         GetGameRequest request = new GetGameRequest { Id = GameId };
-        GetGameResponse response = await _client.GetAsync<GetGameRequest, GetGameResponse>(GameRoutes.Get, request);
+        GetGameResponse response = await _client.GetAsync<GetGameRequest, GetGameResponse>(GameRoutes.GetGame, request);
         _gameState = response.State;
     }
 

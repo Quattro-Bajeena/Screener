@@ -1,10 +1,10 @@
 ﻿using Game.Consts;
 using Microsoft.AspNetCore.Components;
 
-namespace Screener.Client.Pages;
+namespace Screener.Client.Pages.Game;
 
-[Route(GameRoutes.Game)]
-public partial class GamePage : ComponentBase
+[Route(GameRoutes.BrowseRooms)]
+public partial class RoomBrowserPage : ComponentBase
 {
     protected async override Task OnInitializedAsync()
     {

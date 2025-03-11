@@ -2,5 +2,5 @@
 
 public static class Routes
 {
-    public const string Api = "api";
+    public const string Api = "/api";
 }

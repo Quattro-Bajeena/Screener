@@ -1,6 +1,8 @@
-﻿namespace Game.Contracts.Requests;
+﻿using Core.Web;
 
-public class AnswerRequest
+namespace Game.Contracts.Requests;
+
+public class AnswerRequest : RequestBase
 {
     public Guid GameId { get; set; }
     public Guid PlayerId { get; set; }

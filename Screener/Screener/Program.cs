@@ -41,14 +41,18 @@ builder.Services.AddScreenerServices();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddControllers();
+
 builder.Services.AddResponseCompression(opts =>
 {
     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
         ["application/octet-stream"]);
 });
 
-var app = builder.Build();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi();
 
+var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
@@ -56,6 +60,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
     app.UseMigrationsEndPoint();
+    app.MapOpenApi();
 }
 else
 {
@@ -77,6 +82,9 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+app.MapControllers();
+app.MapDefaultControllerRoute();
 
 app.MapHub<ChatHub>("/chathub");
 
