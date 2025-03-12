@@ -1,6 +1,10 @@
-﻿@using Core.Client.Services
+﻿@using Core
+@using Core.Client.Services
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
 @using Screener.Data
+@using System.Security.Claims
+@using System.Security.Principal
 @using global::Game.Consts
 @using global::Game.Contracts.Requests
 @using global::Game.Contracts.Responses
@@ -17,11 +21,11 @@ else
     <h3>Game room name: @_gameRoom.Name</h3>
     <br />
     <p>Players:</p>
-    @foreach (ApplicationUser user in _gameRoom?.Users)
+    @foreach (ApplicationUser user in _gameRoom.Users)
     {
-       
+
         <p>
-            @if (user.UserName == _userName)
+            @if (_currentUser.HasClaim(claim=> claim.Type == UserClaims.Id && claim.Value == user.Id))
             {
                 <div>YOU</div>
             }
@@ -30,30 +34,32 @@ else
         </p>
 
     }
+
+    <br />
+    <button>Start Game</button>
+    <button>Change rules</button>
 }
 
 
 @code {
 
     [Parameter]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     [Inject]
-    private ApiClient ApiClient { get; set; }
-
-    private Models.GameRoom _gameRoom;
-    string _userName;
-
+    private ApiClient ApiClient { get; set; } = default!;
 
     [Inject]
-    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    private UserService UserService { get; set; } = default!;
+
+    private Models.GameRoom? _gameRoom;
+
+    private ClaimsPrincipal? _currentUser;
 
     protected async override Task OnInitializedAsync()
     {
-        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
-        _userName = user.Identity.Name;
-        var userId = user.FindFirst(c => c.Type == "sub")?.Value;
         GetRoomResponse response = await ApiClient.GetAsync<GetRoomRequest, GetRoomResponse>(GameRoutes.GetRoom, new GetRoomRequest { Id = Id });
-        _gameRoom = response.Room;
+        _currentUser = await UserService.GetCurrentUser();
+        _gameRoom = response?.Room;
     }
 }

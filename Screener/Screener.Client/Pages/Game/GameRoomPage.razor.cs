@@ -8,6 +8,4 @@ public partial class GameRoomPage
 {
     [Parameter]
     public string Id { get; set; }
-
-
 }

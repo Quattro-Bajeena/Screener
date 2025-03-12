@@ -1,7 +1,7 @@
-﻿@using Screener.Data
+﻿@using Microsoft.AspNetCore.Authorization
+@using Screener.Data
+@attribute [Authorize]
 
 <PageTitle>Game room page</PageTitle>
-
 <h3>Game room page</h3>
-
 <Game.Client.GameRoom Id="@Id" />
